@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .addBorder{
+        border:1px solid #ccc;
+    }
+
+    #imgDiv{
+        width:100px;
+        height:100px;
+    }
+
+    #imgContent{
+        width: 100%;
+        height:100%;
+    }
+</style>
+<body>
+<form id="imgForm">
+    <input type="file" class="addBorder">
+    <br/>
+    <button type="button" onclick="loadImg()">获取图片</button>
+</form>
+
+<div class="addBorder" id="imgDiv">
+    <img id="imgContent">
+</div>
+</body>
+<script>
+    function loadImg(){
+        //获取文件
+        var file = $("#imgForm").find("input")[0].files[0];
+
+        //创建读取文件的对象
+        var reader = new FileReader();
+
+        //创建文件读取相关的变量
+        var imgFile;
+
+        //为文件读取成功设置事件
+        reader.onload=function(e) {
+            alert('文件读取完成');
+            imgFile = e.target.result;
+            console.log(imgFile);
+            $("#imgContent").attr('src', imgFile);
+        };
+
+        //正式读取文件
+        reader.readAsDataURL(file);
+    }
+
+
+</script>
+</html>

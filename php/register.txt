@@ -1,0 +1,8 @@
+create table user(
+user_id int unsigned primary key auto_increment,
+username varchar(20) not null,
+password varchar(100) not null,
+white_list tinyint not null default 1,
+reg_time datetime,
+pic varchar(100) not null default 'default.jpg'
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1001;

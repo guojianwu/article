@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>个人中心</title>
+    <link rel="shortcut icon" href="/article/css/favicon.png" title="Favicon">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="../css/jumbotron.css" rel="stylesheet">
+    <!--<link rel="stylesheet" href="../css/elment_index.css">-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="../editlib/kindeditor-all.js"></script>
+    <script src="../js/autoscreen.js"></script>
+    <link rel="stylesheet" href="../css/jquery.Jcrop.css">
+
+</head>
+<style>
+    .container{
+        position: relative;
+
+    }
+    .container .username{
+        position: absolute;
+        font-size: 0.5rem;
+        left: 4.5rem;
+        top: 0.6rem;
+    }
+    .container .username p a{
+        font-size: 0.5rem;
+    }
+    .container .username p{
+        margin-top: 0.3rem;
+        font-size: 0.5rem;
+
+    }
+    .article{
+        position: relative;
+        font-size: 0.4rem;
+    }
+    [v-cloak] {
+        display: none;
+    }
+    .mutil_btn{
+        position: relative;
+    }
+    .mutil_btn .caozuo{
+        position: absolute;
+        right: 0.3rem;
+        top: 0;
+    }
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 2.5rem;
+        height: 2.5rem;
+        line-height: 2.5rem;
+        text-align: center;
+    }
+    .avatar {
+        width: 2.5rem;
+        /*height: 2.5rem;*/
+        display: block;
+    }
+    .el-upload__input{
+        display: none;
+    }
+    input[type=file] {
+        display: none;
+    }
+    .clip_avatar{
+        position: fixed;
+        width: 100%;
+
+        top:10%;
+        /*left: 10%;*/
+        z-index: 1000;
+        background: #eee;
+
+
+    }
+    .box_avatar{
+        width: 9rem;
+        padding: 1rem 0;
+        margin: 0 auto;
+    }
+    .clip_avatar img{
+        width: 100%;
+    }
+    .mack{
+        overflow: hidden;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top:0;
+        left: 0;
+        background:#000;
+        filter:alpha(opacity:30);
+        opacity:0.3;
+        z-index: 99;
+    }
+    .over_hidden{
+        overflow: hidden;
+    }
+    @media (max-width: 480px){
+        .el-message-box{
+            width: 80%;
+        }
+        .el-message{
+            width: 80%;
+        }
+
+    }
+
+    .pub_item{
+        padding-top: 0.1rem;
+        padding-bottom: 0.1rem;
+    }
+    .el-pagination{
+        padding: 2px 0px;
+    }
+
+    .el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li{
+        min-width: 0.75rem;
+        margin: 0 2px;
+    }
+    .el-pagination button, .el-pagination span:not([class*=suffix]){
+        height: 0.75rem;
+        line-height: 0.75rem;
+        min-width: 0.75rem;
+    }
+    .el-pager li{
+        height: 0.75rem;
+        line-height: 0.75rem;
+    }
+    .jumbotron .pub_content span{
+        word-wrap: break-word;
+    }
+    .jumbotron .pub_content p{
+        word-wrap: break-word;
+    }
+    .jumbotron .pub_content img{
+        max-width: 100%;
+    }
+</style>
+
+<body>
+<div id="app" v-cloak>
+    <!--<div class="clip_avatar" >-->
+        <!--<div class="box_avatar">-->
+            <!--<img  id="clip_avatar" :src="imageUrl">-->
+        <!--</div>-->
+
+    <!--</div>-->
+
+
+    <div id="nav"></div>
+    <div class="container">
+
+
+        <div class="jumbotron">
+           <div>
+               <el-upload
+                       class="avatar-uploader"
+                       action="../php/up_avatar.php"
+                       :show-file-list="false"
+                       :on-success="handleAvatarSuccess"
+                       :before-upload="beforeAvatarUpload">
+                   <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                   <i v-else class="el-icon-plus avatar-uploader-icon "></i>
+               </el-upload>
+
+               <!--<img src="http://www.cssxt.com/uploadfile/2017/1206/20171206032129384.jpg" alt="..." class="img-thumbnail" style="width: 2rem">-->
+           </div>
+            <div class="username">
+                <p>{{username}}</p>
+                <p><a href="/article/view/add_publish.html" target="_blank">去发表日志</a></p>
+            </div>
+
+        </div>
+
+        <div  v-for="pub in PublishDate.publish">
+            <div class="jumbotron pub_item">
+                <h4 style="text-align: center">{{pub.pub_title}}</h4>
+                <!--<p style="font-size: 16px">发布者: <span style="font-size: 18px">{{pub.pub_name}}</span></p>-->
+                <p style="font-size: 16px">发布时间: <span style="font-size: 18px">{{pub.pub_time}}</span></p>
+                <div v-html="pub.pub_content" class="pub_content">
+
+                </div>
+                <div class="mutil_btn">
+                    <p style="margin-top: 30px">
+                        <a target="_blank" class="btn btn-default btn-primary" :href="'details.html?pub_id='+pub.pub_id" role="button">详情</a>
+                    </p>
+                    <p class="caozuo">
+                        <!--<a target="_blank" class="btn btn-lg btn-primary" :href="'details.html?pub_id='+pub.pub_id" role="button">修改</a>-->
+
+                        <a target="_blank" class="btn btn-default btn-primary delete_publish" role="button" @click="openPub(1,pub)" v-if="pub.pub_privacy==2">公开</a>
+                        <a target="_blank" class="btn btn-default btn-primary delete_publish"  role="button"  @click="openPub(2,pub)"  v-if="pub.pub_privacy==1">私有</a>
+                        <a target="_blank" class="btn btn-default btn-danger delete_publish" @click="delete_publish(pub.pub_id)" role="button">删除</a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="my_page" style="margin-bottom: 0.4rem;text-align: center"  v-if="publishCount>0">
+        <div>
+            <el-pagination
+                    background
+                    layout="prev, pager, next"
+                    :total="publishCount"
+                    @current-change="currentChange">
+            </el-pagination>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+<script src="../js/axios.min.js"></script>
+<script src="../js/vue.min.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.Jcrop.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/ie10-viewport-bug-workaround.js"></script>
+<script src="../js/require.js" data-main="../js/main" data-page="person_center" id="require"></script>
+<script>
+    var jcropApi;
+    $('#clip_avatar').Jcrop({
+        allowSelect: true,
+        allowResize:false,
+        boxWidth:300,
+        boxHeight:200,
+        maxSize:[150,150],
+        minSize:[150,150],
+        touchSupport:true,
+        baseClass: 'jcrop'
+
+    }, function() {
+        jcropApi = this;
+        console.log(jcropApi);
+    });
+
+//    $('.sure').on('click',function () {
+//        console.log(jcropApi.tellSelect());
+//    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>分类</title>
+    <link rel="shortcut icon" href="/article/css/favicon.png" title="Favicon">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="../css/jumbotron.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="../editlib/kindeditor-all.js"></script>
+    <script src="../js/autoscreen.js"></script>
+</head>
+<style>
+    .box_alert{
+        position:fixed;
+        top: 5%;
+        left: 25%;
+        text-align: center;
+        width: 50%;
+        font-size:0.35rem;
+    }
+    .pub_content{
+        overflow:hidden;
+        /*text-overflow:ellipsis;*/
+        /*display:-webkit-box;*/
+        /*-webkit-box-orient:vertical;*/
+        /*-webkit-line-clamp:2;*/
+    }
+    [v-cloak] {
+        display: none;
+    }
+    .el-pagination{
+        padding: 2px 0px;
+    }
+
+    .el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li{
+        min-width: 0.75rem;
+        margin: 0 2px;
+    }
+    .el-pagination button, .el-pagination span:not([class*=suffix]){
+        height: 0.75rem;
+        line-height: 0.75rem;
+        min-width: 0.75rem;
+    }
+    .el-pager li{
+        height: 0.75rem;
+        line-height: 0.75rem;
+    }
+    .jumbotron .pub_content span{
+        word-wrap: break-word;
+    }
+    .jumbotron .pub_content p{
+        word-wrap: break-word;
+    }
+    .jumbotron .pub_content img{
+        max-width: 100%;
+    }
+</style>
+
+<body>
+<div id="app" v-cloak>
+    <div id="nav"></div>
+
+    <div class="container" v-for="pub in PublishDate.publish">
+        <div class="jumbotron">
+            <h4 style="text-align: center">{{pub.pub_title}}</h4>
+            <p style="font-size: 16px">发布者:  <a :href="'/article/view/personal.html?pub_name='+pub.pub_name"><img :src="'/article/avatar/'+pub.pic" style="width: 1rem;max-height: 1rem;"><span style="font-size: 18px">{{pub.pub_name}}</span></a></p>
+            <p style="font-size: 16px">发布时间: <span style="font-size: 18px">{{pub.pub_time}}</span></p>
+            <div v-html="pub.pub_content" class="pub_content">
+
+            </div>
+            <p style="margin-top: 30px">
+                <a target="_blank" class="btn btn-default btn-primary" :href="'details.html?pub_id='+pub.pub_id" role="button">详情</a>
+            </p>
+        </div>
+
+    </div>
+    <!--v-if="pubCommitData.commit_data.length>0"-->
+    <div class="my_page" style="margin-bottom: 0.4rem;text-align: center" v-if="publishCount>0">
+        <div>
+            <el-pagination
+                    background
+                    layout="prev, pager, next"
+                    :total="publishCount"
+                    @current-change="currentChange">
+            </el-pagination>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="../js/axios.min.js"></script>
+<script src="../js/vue.min.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/ie10-viewport-bug-workaround.js"></script>
+<script src="../js/require.js" data-main="../js/main" data-page="publish_type" id="require"></script>
+
+</body>
+</html>

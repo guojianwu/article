@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>文章详情</title>
+    <link rel="shortcut icon" href="/article/css/favicon.png" title="Favicon">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="../css/jumbotron.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!--<script src="../js/ie8-responsive-file-warning.js"></script>-->
+    <!--<script src="../js/ie-emulation-modes-warning.js"></script>-->
+    <!--<script src="../js/html5shiv.min.js"></script>-->
+    <!--<script src="../js/respond.min.js"></script>-->
+    <script src="../editlib/kindeditor-all.js"></script>
+    <script src="../js/autoscreen.js"></script>
+</head>
+<style>
+    .box_alert{
+        position:fixed;
+        top: 5%;
+        left: 25%;
+        text-align: center;
+        width: 50%;
+        font-size:0.35rem;
+    }
+    [v-cloak] {
+        display: none;
+    }
+    .pub_item{
+        padding-top: 0.15rem;
+        padding-bottom: 0.2rem;
+
+    }
+    .avatar{
+        width: 1rem;
+        border-radius: 50%;
+        margin-right: 0.1rem;
+        margin-left: 0.2rem;
+
+    }
+    .comment_item{
+
+        position: relative;
+        overflow: hidden;
+        margin-top: 0.5rem;
+        padding-bottom: 0.2rem;
+        border-bottom: 1px solid #CCCCCC;
+    }
+    .comment_avatar{
+        width: 2rem;
+        text-align: center;
+        float: left;
+
+    }
+    .comment .comment_avatar img{
+        width: 1.3rem;
+    }
+
+    .comment .comment_content{
+        font-size: 0.3rem;
+        /*text-indent: 2em;*/
+        margin-bottom: 0px;
+        margin-left: 2rem;
+    }
+    .comment .comment_content p{
+        font-size: 0.3rem;
+    }
+    .comment .comment_content .commit_name{
+        font-size: 0.38rem;
+        margin-bottom: 0px;
+        color: #337ab7;
+        font-weight:bold;
+    }
+    .comment .comment_time{
+        font-size: 0.35rem;
+        margin-bottom: 0;
+        text-align: right;
+        position: absolute;
+        right: 0;
+        bottom: 0.2rem;
+        font-size: 0.3rem;
+
+    }
+    .send{
+        padding: 0.15rem 0.2rem;
+        background: #eee;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+    }
+    .el-pagination{
+        padding: 2px 0px;
+    }
+
+    .el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li{
+        min-width: 0.75rem;
+        margin: 0 2px;
+    }
+    .el-pagination button, .el-pagination span:not([class*=suffix]){
+        height: 0.75rem;
+        line-height: 0.75rem;
+        min-width: 0.75rem;
+    }
+    .el-pager li{
+        height: 0.75rem;
+        line-height: 0.75rem;
+    }
+    .jumbotron .pub_content span{
+        word-wrap: break-word;
+    }
+    .jumbotron .pub_content p{
+        word-wrap: break-word;
+    }
+    .jumbotron .pub_content img{
+        max-width: 100%;
+    }
+</style>
+
+<body>
+<div id="app" v-cloak>
+    <div id="nav"></div>
+
+    <div class="container" v-for="pub in PublishDate.publish">
+        <div class="jumbotron pub_item">
+            <h3 style="text-align: center">{{pub.pub_title}}</h3>
+            <!--<img  alt="" class="avatar"> -->
+            <p style="font-size: 16px">发布者: <a :href="'/article/view/personal.html?pub_name='+pub.pub_name"><img :src="'/article/avatar/'+pub.pic" style="width: 1rem;max-height: 1rem;"><span style="font-size: 18px">{{pub.pub_name}}</span></a></p>
+            <div class="pub_content" v-html="pub.pub_content"></div>
+            <p style="font-size: 0.3rem;position: relative;text-align: right;margin-top: 0.2rem;">
+                <span style="position: absolute;left: 0;top: 0;">评论:<span style="font-size: 0.4rem;color: #337ab7;">{{publishCount}}</span></span>
+                <span style="text-align: center">发布时间: <span style="font-size: 0.4rem;color: #337ab7;">{{pub.pub_time}}</span></span>
+            </p>
+
+        </div>
+
+        <div class="comment" v-if="publishCount>0">
+            <div class="jumbotron pub_item">
+                <div class="comment_item" v-for="commit in pubCommitData.commit_data">
+                    <div class="comment_avatar">
+                        <img :src="'/article/avatar/'+commit.commit_pic" alt="">
+                        <!--<p></p>-->
+                    </div>
+                    <div class="comment_content">
+                        <p class="commit_name">{{commit.commit_name}}</p>
+                        <p>{{commit.commit_content}}</p>
+                    </div>
+                    <p class="comment_time">{{commit.commit_time}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="my_page" style="margin-bottom: 0.4rem;text-align: center"  v-if="publishCount">
+            <div>
+                <el-pagination
+                        background
+                        layout="prev, pager, next"
+                        :total="publishCount"
+                        @current-change="currentChange">
+                </el-pagination>
+            </div>
+        </div>
+
+        <form class=" send ">
+            <div class="form-group">
+                <textarea name="editor1" v-model="commitContent" cols="100" rows="20" style="width:100%;height:2rem;font-size: 0.32rem" placeholder="评论内容"></textarea>
+                <p v-if="isLogin"><a :href="longUrl" v-html="commitTip"></a></p>
+            </div>
+            <div style="text-align: center">
+                <input type="button" class="btn btn-primary btn-success getValues" @click="send_commit"value="发送"  style="width: 2rem;" />
+                <input type="reset" class="btn btn-primary btn-danger " value="清空"  style="width: 2rem;" />
+            </div>
+        </form>
+
+
+
+    </div>
+
+
+</div>
+
+
+
+<script src="../js/axios.min.js"></script>
+<script src="../js/vue.min.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/ie10-viewport-bug-workaround.js"></script>
+<script src="../js/require.js" data-main="../js/main" data-page="details" id="require"></script>
+<!--<script>
+    //document.domain = 'domain.com';
+    initkindEditor();
+    function initkindEditor() {
+        KindEditor.ready(function(K) {
+            window.editor = K.create('textarea', {
+                allowFileManager : true,
+                langType : 'zh-CN',
+                uploadJson: '../php/editUpImg.php',
+                autoHeightMode : true,
+
+                afterChange: function () {
+                    //富文本输入区域的改变事件，一般用来编写统计字数等判断
+//                    K('.word_count1').html("最多20000个字符,已输入" + this.count() + "个字符");
+                },
+            });
+
+        });
+    }
+    $(".getValues").on("click", function () {
+//        var pub_name=$.trim($('.pub_name').val());
+        var pub_name=$.trim($('#nav .nav_username').html())
+        var pub_title=$.trim($('.pub_title').val());
+        var pub_type=$.trim($('.article_type option:selected').text());
+        var pub_content=KindEditor.instances[0].html().trim();
+
+        if(!pub_name ||!pub_title ||!pub_type ||!pub_content){
+            alert_tip('请填写完整!!!',1500);
+            return false;
+        }
+
+
+        $.post('../php/add_publish.php',{
+            pub_name:pub_name,
+            pub_title:pub_title,
+            pub_type:pub_type,
+            pub_content:pub_content
+        }).done(function (res) {
+            var res =JSON.parse(res);
+            $('.pub_name').val('');
+            $('.pub_title').val('');
+            $('.article_type option:selected').text();
+            KindEditor.instances[0].html('')
+            if(res.err==0){
+                alert_tip('文章发表失败',1500);
+            }
+            if(res.err==1){
+                alert_tip('文章发表成功',1500);
+            }
+
+        });
+
+
+    });
+
+    function alert_tip(text,time) {
+        $('.box_alert > div').text(text);
+        $('.box_alert').show();
+        $('.box_alert').stop().animate({'top':'6.5%'},200);
+        setTimeout(function () {
+            $('.box_alert').fadeOut(500,function () {
+                $('.box_alert').css({'top':'0%'})
+            });
+
+        },time);
+    }
+
+</script>-->
+
+</body>
+</html>

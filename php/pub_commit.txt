@@ -1,0 +1,8 @@
+create table pub_commit(
+    commit_id bigint unsigned primary key auto_increment,
+    commit_pub_id int unsigned,
+    commit_name varchar(30) not null,
+    commit_content text not null,
+    commit_pic varchar(110) not null,
+    commit_time datetime not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

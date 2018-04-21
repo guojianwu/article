@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>发表日志</title>
+    <link rel="shortcut icon" href="/article/css/favicon.png" title="Favicon">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="../css/jumbotron.css" rel="stylesheet">
+   <!--<script src="../js/ie8-responsive-file-warning.js"></script>-->
+    <!--<script src="../js/ie-emulation-modes-warning.js"></script>-->
+    <!--<script src="../js/html5shiv.min.js"></script>-->
+    <!--<script src="../js/respond.min.js"></script>-->
+    <script src="../editlib/kindeditor-all.js"></script>
+    <script src="../js/autoscreen.js"></script>
+</head>
+<style>
+    .box_alert{
+        position:fixed;
+        top: 0%;
+        left: 25%;
+        text-align: center;
+        width: 50%;
+        font-size:0.35rem;
+    }
+    input[type="radio"] + label::before {
+        content: "\a0"; /*不换行空格*/
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 18px;
+        width: 1em;
+        height: 1em;
+        margin-right: .4em;
+        border-radius: 50%;
+        border: 1px solid #01cd78;
+        text-indent: .15em;
+        line-height: 1;
+    }
+    input[type="radio"]:checked + label::before {
+        background-color: #01cd78;
+        background-clip: content-box;
+        padding: .2em;
+    }
+    input[type="radio"] {
+        position: absolute;
+        clip: rect(0, 0, 0, 0);
+    }
+</style>
+
+<body>
+<div id="nav"></div>
+
+<form style="margin: 2% 5%;">
+    <h4 style="text-align: center">发表日志</h4>
+
+    <!--<div class="form-group">-->
+        <!--<label>发布者</label>-->
+        <!--<input type="email" class="form-control pub_name" placeholder="发布者">-->
+    <!--</div>-->
+    <div class="form-group">
+        <label>日志标题</label>
+        <input type="text" class="form-control pub_title" placeholder="文章标题">
+    </div>
+    <div  class="form-group">
+        <label>日志类型</label>
+        <select class="form-control article_type add_publish_type">
+        </select>
+    </div>
+    <div class="form-group" style="margin-bottom: 8px;">
+        <div class="box_privacy">
+            <input type="radio" id="female" name="privacy" checked="checked" value="1" />
+            <label for="female" style="margin-right: 0.3rem;">公开</label>
+            <input type="radio" id="male" name="privacy" value="2" />
+            <label for="male">私有</label>
+        </div>
+    </div>
+    <div class="form-group">
+         <label>日志内容</label>
+         <textarea name="editor1" cols="100" rows="20" style="width:100%;height:400px;" placeholder="文章内容"></textarea>
+        <!--<p class="word_count1"></p>-->
+
+    </div>
+    <div style="text-align: center">
+        <input type="button" class="btn btn-primary btn-success getValues" value="提交"  style="width: 2rem;" />
+        <input type="reset" class="btn btn-primary btn-danger " value="清空"  style="width: 2rem;" />
+    </div>
+
+
+
+</form>
+
+<div class="box_alert" style="display: none">
+    <div class="alert alert-warning" role="alert"></div>
+</div>
+
+
+<script src="../js/jquery.min.js"></script>
+<!--<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>-->
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/ie10-viewport-bug-workaround.js"></script>
+<script src="../js/require.js" data-main="../js/main" data-page="add_publish" id="require"></script>
+
+<script>
+    //document.domain = 'domain.com';
+    initkindEditor();
+    function initkindEditor() {
+        KindEditor.ready(function(K) {
+            window.editor = K.create('textarea', {
+                allowFileManager : true,
+                langType : 'zh-CN',
+                uploadJson: '../php/editUpImg.php',
+                autoHeightMode : true,
+
+                afterChange: function () {
+                    //富文本输入区域的改变事件，一般用来编写统计字数等判断
+//                    K('.word_count1').html("最多20000个字符,已输入" + this.count() + "个字符");
+                },
+            });
+
+        });
+    }
+    $(".getValues").on("click", function () {
+//        var pub_name=$.trim($('.pub_name').val());
+        var pub_name=$.trim($('#nav .nav_username').html())
+        var pub_title=$.trim($('.pub_title').val());
+        var pub_type=$.trim($('.article_type option:selected').text());
+        var pub_content=KindEditor.instances[0].html().trim();
+        var pub_privacy = $('.box_privacy input[name="privacy"]:checked ').val();
+        pub_content=pub_content.replace(/'/g,'"');
+        if(!pub_name ||!pub_title ||!pub_type ||!pub_content){
+            alert_tip('请填写完整!!!',1500);
+            return false;
+        }
+
+
+        $.post('../php/add_publish.php',{
+            pub_name:pub_name,
+            pub_title:pub_title,
+            pub_type:pub_type,
+            pub_content:pub_content,
+            pub_privacy:pub_privacy
+        }).done(function (res) {
+            var res =JSON.parse(res);
+
+            if(res.err==0){
+                alert_tip('文章发表失败',1500);
+            }
+            if(res.err==1){
+                KindEditor.instances[0].html('');
+                alert_tip('文章发表成功',1500);
+                $('.pub_name').val('');
+                $('.pub_title').val('');
+                $('.article_type option:selected').text();
+            }
+
+        });
+
+
+    });
+
+    function alert_tip(text,time) {
+        $('.box_alert > div').text(text);
+        $('.box_alert').show();
+        $('.box_alert').stop().animate({'top':'6.5%'},200);
+        setTimeout(function () {
+            $('.box_alert').fadeOut(500,function () {
+                $('.box_alert').css({'top':'0%'})
+            });
+
+        },time);
+    }
+
+</script>
+
+
+</body>
+</html>

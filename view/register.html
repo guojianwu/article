@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>注册</title>
+    <link rel="shortcut icon" href="/article/css/favicon.png" title="Favicon">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="../css/jumbotron.css" rel="stylesheet">
+    <script src="../editlib/kindeditor-all.js"></script>
+    <script src="../js/autoscreen.js"></script>
+</head>
+<style>
+    .box_alert{
+        position:fixed;
+        top: 5%;
+        left: 25%;
+        text-align: center;
+        width: 50%;
+        font-size:0.35rem;
+    }
+    .pub_content{
+        overflow:hidden;
+        /*text-overflow:ellipsis;*/
+        /*display:-webkit-box;*/
+        /*-webkit-box-orient:vertical;*/
+        /*-webkit-line-clamp:2;*/
+    }
+    .box_verifi{
+        position: relative;
+    }
+    .reg_verifi{
+        position: relative;
+    }
+    .reg_verifi{
+        position:absolute;
+        right: 0;
+        top:18px;
+        vertical-align: middle;
+        /*width: 100%;*/
+    }
+    .reg_verifi img{
+        max-width: 4rem;
+        cursor: pointer;
+    }
+
+</style>
+
+<body>
+<div id="app">
+    <div id="nav"></div>
+    <h4 style="text-align: center">注册</h4>
+    <form style="margin: 2% 10%;" class="reg_form">
+        <div class="form-group">
+            <label >用户名</label>
+            <input type="text" class="form-control username"  placeholder="用户名">
+        </div>
+        <div class="form-group">
+            <label >密码</label>
+            <input type="password" class="form-control password"  placeholder="密码">
+        </div>
+        <div class="form-group">
+            <label>确认密码</label>
+            <input type="password" class="form-control repassword"  placeholder="确认密码">
+        </div>
+
+        <div class="form-group box_verifi">
+            <label>请输入验证码</label>
+            <div style="width: 65%">
+                <input type="text" class="form-control verification" placeholder="验证码">
+            </div>
+            <div class="reg_verifi">
+                <img src="../php/reg_verifi.php" alt="">
+            </div>
+        </div>
+
+
+        <div style="text-align: center">
+            <button type="button" class="btn btn-primary btn-success reg_btn" style="padding: 8px 50px;">注册</button>
+        </div>
+
+    </form>
+
+    <div class="box_alert" style="display: none">
+        <div class="alert alert-warning" role="alert"></div>
+    </div>
+
+</div>
+
+
+
+<script src="../js/axios.min.js"></script>
+<script src="../js/vue.min.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/ie10-viewport-bug-workaround.js"></script>
+<script src="../js/require.js" data-main="../js/main" data-page="register" id="require"></script>
+
+</body>
+</html>

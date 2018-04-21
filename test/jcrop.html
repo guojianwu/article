@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="Jcrop/css/jquery.Jcrop.css">
+    <script src="Jcrop/js/jquery.min.js"></script>
+    <script src="Jcrop/js/jquery.Jcrop.js"></script>
+
+</head>
+<body>
+<img id="element_id" src="Jcrop/pool.jpg">
+<button class="sure">确定</button>
+<script type="text/javascript">
+    var jcropApi;
+    $('#element_id').Jcrop({
+        allowSelect: true,
+        allowResize:false,
+        maxSize:[150,150],
+        minSize:[150,150],
+        touchSupport:true,
+        baseClass: 'jcrop'
+
+    }, function() {
+        jcropApi = this;
+        console.log(jcropApi);
+    });
+
+    $('.sure').on('click',function () {
+        console.log(jcropApi.tellSelect());
+    })
+
+
+</script>
+</body>
+</html>

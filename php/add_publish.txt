@@ -1,0 +1,13 @@
+create database article;
+
+
+create table publish(
+pub_id int unsigned primary key auto_increment,
+pub_name varchar(30) not null,
+pub_title varchar(70) not null,
+pub_type varchar(10) not null,
+pub_content mediumtext not null,
+pub_privacy tinyint not null default 1,
+pub_online tinyint not null default 1,
+pub_time datetime
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1001;

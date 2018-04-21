@@ -1,0 +1,5 @@
+create table publish_types(
+type_id smallint unsigned primary key auto_increment,
+type_name varchar(10) not null,
+type_online tinyint not null default 1
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

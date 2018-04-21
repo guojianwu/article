@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="clip/css/imgareaselect-default.css">
+    <script src="clip/scripts/jquery.min.js"></script>
+    <script src="clip/scripts/jquery.imgareaselect.pack.js"></script>
+
+</head>
+<body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('img#photo').imgAreaSelect({
+            handles: true,
+            onSelectEnd: function (res) {
+                console.log(res);
+            }
+        });
+    });
+</script>
+</body>
+</html>
